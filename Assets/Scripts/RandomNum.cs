@@ -5,6 +5,9 @@ using TMPro;
 
 public class RandomNum : MonoBehaviour
 {
+
+    public static RandomNum easyRef;
+
     public TextMeshProUGUI lightText;
     public TextMeshProUGUI darkText;
 
@@ -17,8 +20,15 @@ public class RandomNum : MonoBehaviour
     public GameObject lightSpawnPoint;
     public GameObject darkSpawnPoint;
 
+
+    public GameObject lightBuliding2;
+
+    public GameObject darkBuliding2;
+
+
     public GameObject lightAttackPoint;
     public GameObject darkAttackPoint;
+
 
 
     private int lightPower;
@@ -31,12 +41,34 @@ public class RandomNum : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        easyRef = this;
         InvokeRepeating("GenerateNum", 5, 5);
     }
 
+    public void ChangePoint(Unit.Force force)
+    {
+        switch (force)
+        {
+            case Unit.Force.Light:
+                lightSpawnPoint = lightBuliding2.transform.Find("SpawnPoint").gameObject;
+                darkAttackPoint = lightBuliding2;
+                break;
 
+            case Unit.Force.Dark:
+                darkSpawnPoint = darkBuliding2.transform.Find("SpawnPoint").gameObject;
+                lightAttackPoint = darkBuliding2;
+                break;
+
+            default:
+                break;
+
+
+        }
+
+    }
     public void GenerateNum()
     {
+
         GameObject temp = null;
         lightPower = Random.Range(15, 56);
         darkPower = Random.Range(15, 56);
@@ -47,22 +79,31 @@ public class RandomNum : MonoBehaviour
         for (int i = 0; i < lightPower % 10; i++)
         {
             temp = Instantiate(lightUnit, lightSpawnPoint.transform.position, lightUnit.transform.rotation);
-            temp.GetComponent<Unit>().destination = lightAttackPoint;
+            //temp.GetComponent<Unit>().destination = lightAttackPoint;
             temp.SetActive(true);
 
-            temp = Instantiate(darkUnit, darkSpawnPoint.transform.position, darkUnit.transform.rotation);
-            temp.GetComponent<Unit>().destination = darkAttackPoint;
-            temp.SetActive(true);
         }
 
         for (int i = 0; i < lightPower / 10; i++)
         {
             temp = Instantiate(lightUnit2, lightSpawnPoint.transform.position, lightUnit2.transform.rotation);
-            temp.GetComponent<Unit>().destination = lightAttackPoint;
+            //temp.GetComponent<Unit>().destination = lightAttackPoint;
             temp.SetActive(true);
 
+        }
+        for (int i = 0; i < darkPower % 10; i++)
+        {
+
+            temp = Instantiate(darkUnit, darkSpawnPoint.transform.position, darkUnit.transform.rotation);
+            //temp.GetComponent<Unit>().destination = darkAttackPoint;
+            temp.SetActive(true);
+        }
+
+        for (int i = 0; i < darkPower / 10; i++)
+        {
+
             temp = Instantiate(darkUnit2, darkSpawnPoint.transform.position, darkUnit2.transform.rotation);
-            temp.GetComponent<Unit>().destination = darkAttackPoint;
+            //temp.GetComponent<Unit>().destination = darkAttackPoint;
             temp.SetActive(true);
         }
 
